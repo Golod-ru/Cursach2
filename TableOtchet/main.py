@@ -9,6 +9,20 @@ connection = psycopg2.connect(user="postgres",
                                   host="127.0.0.1",
                                   port="5432",
                                   database="test_base")
+boli = False
+curs = connection.cursor()
+curs.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
+record10 = curs.fetchall()
+for i in range(len(record10)):
+    if record10[i][0] == "Users":
+        boli = True
+if not boli:
+    curs.execute('create table "Users" ('
+                 '"Name" character varying(15) NOT NULL PRIMARY KEY,'
+                 '"Password" character varying(15) NOT NULL,'
+                 '"Status" boolean NOT NULL)')
+    connection.commit()
+
 
 borderwig = 7
 
